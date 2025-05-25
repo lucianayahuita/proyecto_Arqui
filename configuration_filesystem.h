@@ -11,13 +11,12 @@ extern const int FAT_BLOCKS;            // Bloques reservados para la FAT
 extern const int DATA_BLOCK_START;      // Primer bloque de datos
 extern const char* DISK_FILENAME;
 
-// Estructura para la entrada del directorio (metadata de archivos)
 struct EntradaArchivo {
-    char nombre[32];     // Nombre del archivo
-    int tamanio;         // Tamaño en bytes
-    int bloqueInicial;   // Primer bloque de datos
+    char nombre[32];     
+    int tamanio;         
+    int bloqueInicial;   
     time_t fechaCreacion;
-    bool activo;         // Indica si el archivo está en uso
+    bool activo;         
 };
 
 #endif

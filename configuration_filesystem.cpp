@@ -47,16 +47,15 @@ void formatearDisco() {
     }
 
     disco.close();
-    std::cout << "✅ Disco creado y formateado correctamente.\n";
+    std::cout << "Disco creado y formateado correctamente.\n";
 }
 
 void cargarDisco() {
     std::ifstream disco(DISK_FILENAME, std::ios::binary);
     if (!disco.good()) {
-        std::cout << "⚠️ Disco no existe. Se formateará uno nuevo...\n";
+        std::cout << "Disco no existe. Se formateará uno nuevo...\n";
         formatearDisco();
     } else {
-        std::cout << "📁 Disco ya existe. Se cargará sin formatear.\n";
-        // Aquí puedes cargar la FAT y directorio si los necesitas en memoria.
+        std::cout << "Disco ya existe. Se cargará sin formatear.\n";
     }
 }
