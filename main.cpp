@@ -1,4 +1,5 @@
-
+//PARA LINKEAR: g++ main.cpp crear_archivo.cpp leer_archivo.cpp listar_archivos.cpp eliminar_archivo.cpp modificar_archivo.cpp configuration_filesystem.cpp -o sistema_archivos2
+//PARA COMENTAR: ./output/sistema_archivos2.exe
 #include "configuration_filesystem.h"
 #include "crear_archivo.h" 
 #include "leer_archivo.h" 
