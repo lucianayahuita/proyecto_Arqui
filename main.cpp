@@ -38,7 +38,7 @@ int main() {
                 listarArchivos();
                 break;
             case 4:
-                //modificarArchivo();
+                modificarArchivo();
                 break;
             case 5:
                 eliminarArchivo();
