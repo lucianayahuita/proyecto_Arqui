@@ -41,8 +41,9 @@ int main() {
                 //modificarArchivo();
                 break;
             case 5:
-                //eliminarArchivo();
+                eliminarArchivo();
                 break;
+
             case 0:
                 std::cout << " Saliendo...\n";
                 break;

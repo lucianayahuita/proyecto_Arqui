@@ -6,6 +6,6 @@
 #include "crear_archivo.h"
 
 bool modificarArchivo();
-bool cargarFATyDirectorio(int* fat, EntradaArchivo* directorio); 
+
 
 #endif
