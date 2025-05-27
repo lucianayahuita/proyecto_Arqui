@@ -1,0 +1,7 @@
+// DEFINICIONES PARA OBTENER LA INFORMACIÓN DE UN ARCHIVO
+#ifndef OBTENER_INFO_ARCHIVO_H
+#define OBTENER_INFO_ARCHIVO_H
+
+bool obtenerInformacion();
+
+#endif
