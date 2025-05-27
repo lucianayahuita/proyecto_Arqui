@@ -8,6 +8,7 @@
 #include "eliminar_archivo.h"
 #include "ver_infoArchivo.h"
 #include "filtrar_tipo.h"
+#include "filtrar_fecha.h"
 #include <iostream>
 using namespace std;
 void formatearDisco();
@@ -56,6 +57,9 @@ int main() {
                 break;
             case 7: 
                 filtroTipo();
+                break;
+            case 8:
+                filtroFecha();
                 break;
             case 0:
                 std::cout << " Saliendo...\n";
