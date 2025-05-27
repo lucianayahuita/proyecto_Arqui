@@ -1,0 +1,7 @@
+// DEFINICIONES PARA FILTRAR ARCHIVOS POR TAMAÑO
+#ifndef FILTRAR_TAMANIO_H
+#define FILTRAR_TAMANIO_H
+
+void filtroTamanio();
+
+#endif 
