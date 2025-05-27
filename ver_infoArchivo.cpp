@@ -160,11 +160,10 @@ bool obtenerInformacion() {
     cin.ignore();
     
     if (respuesta == 's' || respuesta == 'S') {
-        // Leer y mostrar contenido
         ifstream disco(DISK_FILENAME, ios::binary);
         if (!disco) {
             cerr << "Error al abrir el disco para leer contenido.\n";
-            return true; // La información ya se mostró correctamente
+            return true; 
         }
         
         cout << "\n" << string(30, '-') << " CONTENIDO " << string(19, '-') << "\n";
