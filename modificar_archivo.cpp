@@ -214,3 +214,81 @@ bool modificarArchivo() {
     
     return true;
 }
+// Versión para encriptación (nueva)
+bool modificarArchivo(const std::string& nombreArchivo, const std::string& nuevoContenido) {
+    int fat[TOTAL_BLOCKS];
+    EntradaArchivo directorio[(BLOCK_SIZE * DIRECTORY_BLOCKS) / sizeof(EntradaArchivo)];
+
+    if (!cargarFATyDirectorio(fat, directorio)) {
+        cerr << "Error al cargar FAT y directorio\n";
+        return false;
+    }
+
+    // Buscar archivo
+    int index = -1;
+    for (int i = 0; i < (BLOCK_SIZE * DIRECTORY_BLOCKS) / sizeof(EntradaArchivo); i++) {
+        if (directorio[i].activo && strcmp(directorio[i].nombre, nombreArchivo.c_str()) == 0) {
+            index = i;
+            break;
+        }
+    }
+
+    if (index == -1) {
+        cerr << "Error: Archivo no encontrado\n";
+        return false;
+    }
+
+    // Liberar bloques antiguos
+    int bloqueActual = directorio[index].bloqueInicial;
+    while (bloqueActual != -3 && bloqueActual >= DATA_BLOCK_START) {
+        int siguiente = fat[bloqueActual];
+        fat[bloqueActual] = -1; // Liberar bloque
+        bloqueActual = siguiente;
+    }
+
+    // Asignar nuevos bloques
+    int nuevoTamanio = nuevoContenido.size();
+    int bloquesNecesarios = max(1, (nuevoTamanio + BLOCK_SIZE - 1) / BLOCK_SIZE);
+    vector<int> bloques = asignarBloques(fat, bloquesNecesarios);
+
+    if (bloques.size() < bloquesNecesarios) {
+        cerr << "Error: No hay suficientes bloques libres\n";
+        return false;
+    }
+
+    // Escribir contenido
+    fstream disco(DISK_FILENAME, ios::binary | ios::in | ios::out);
+    if (!disco) {
+        cerr << "Error al abrir disco\n";
+        return false;
+    }
+
+    for (int i = 0; i < bloquesNecesarios; i++) {
+        disco.seekp(bloques[i] * BLOCK_SIZE);
+        int offset = i * BLOCK_SIZE;
+        int bytesAEscribir = min(BLOCK_SIZE, nuevoTamanio - offset);
+        disco.write(nuevoContenido.c_str() + offset, bytesAEscribir);
+
+        // Enlazar bloques en FAT
+        if (i < bloquesNecesarios - 1) {
+            fat[bloques[i]] = bloques[i+1];
+        } else {
+            fat[bloques[i]] = -3; // Fin de cadena
+        }
+    }
+
+    // Actualizar directorio
+    directorio[index].tamanio = nuevoTamanio;
+    directorio[index].bloqueInicial = bloques[0];
+    directorio[index].fechaCreacion = time(nullptr);
+
+    // Guardar cambios
+    if (!guardarFATyDirectorio(fat, directorio)) {
+        cerr << "Error al guardar cambios\n";
+        return false;
+    }
+
+    return true;
+}
+
+// [Mantén tu implementación original de modificarArchivo() sin parámetros aquí]

@@ -1,6 +1,6 @@
-//PARA LINKEAR: g++ main.cpp crear_archivo.cpp leer_archivo.cpp listar_archivos.cpp eliminar_archivo.cpp modificar_archivo.cpp configuration_filesystem.cpp -o sistema_archivos2
-//PARA COMENTAR: ./sistema_archivos2.exe
-//PARA LINKEAR: g++ main.cpp crear_archivo.cpp leer_archivo.cpp listar_archivos.cpp eliminar_archivo.cpp modificar_archivo.cpp configuration_filesystem.cpp directorio_manager.cpp -o sistema_archivos2
+//PARA LINKEAR: g++ main.cpp crear_archivo.cpp leer_archivo.cpp listar_archivos.cpp eliminar_archivo.cpp modificar_archivo.cpp configuration_filesystem.cpp directorio_manager.cpp register.cpp encriptacion.cpp -o sistema_archivos2
+//PARA EJECUTAR: ./sistema_archivos2.exe
+
 #include "register.h"
 #include "configuration_filesystem.h"
 #include "crear_archivo.h"
@@ -14,6 +14,7 @@
 #include "filtrar_tamanio.h"
 #include "directorio_manager.h"  
 #include "wrapper_funciones.h"
+#include "encriptacion.h"  // Nuevo include para encriptación
 #include <string>
 #include <iostream>
 
@@ -21,16 +22,25 @@ using namespace std;
 
 void formatearDisco();
 void cargarDisco();
+void menuEncriptacion();
 
 int main() {
     cout << "=== SISTEMA DE ARCHIVOS CON DIRECTORIOS ===\n";
+    
+    // PROCESO DE AUTENTICACIÓN
+    cout << "Debe autenticarse para usar el sistema de archivos." << endl;
+    if (!authenticateUser()) {
+        cout << "No se pudo autenticar. Cerrando el sistema." << endl;
+        return 1;
+    }
+    
+    // Una vez autenticado, continuar con el sistema de archivos
     cargarDisco();
     inicializarSistemaDirectorios();
-    cout<<"Inicie sesion"<<endl;
-    registerUser();
-    //Crear directorio inicial
+    
+    // Crear directorio inicial
     string nombreDirectorio;
-    cout << "Ingrese el nombre del directorio de trabajo: ";
+    cout << "\nIngrese el nombre del directorio de trabajo: ";
     getline(cin, nombreDirectorio);
     
     if (nombreDirectorio.length() >= 20) {
@@ -59,10 +69,8 @@ int main() {
         cout << "7. Filtrar por extension de archivo\n";
         cout << "8. Filtrar por fecha de creación\n";
         cout << "9. Filtrar por tamaño de bytes\n";
-        // OPCIONES DE DIRECTORIO
-        cout << "10. Crear directorio\n";
-        cout << "11. Cambiar directorio\n";
-        cout << "12. Listar directorios\n";
+        // NUEVAS OPCIONES DE ENCRIPTACIÓN
+        cout << "10. 🔐 Sistema de Encriptación\n";
         cout << "0. Salir\n";
         cout << "Ingrese una opcion: ";
         cin >> opcion;
@@ -97,24 +105,9 @@ int main() {
                 filtroTamanio();     
                 break;
             case 10: {
-                string nombreDirectorio;
-                cout << "Ingrese el nombre del nuevo directorio: ";
-                getline(cin, nombreDirectorio);
-                crearDirectorio(nombreDirectorio);
+                menuEncriptacion();  
                 break;
             }
-            case 11: {
-                cout << "Directorios disponibles:\n";
-                listarDirectorios();
-                cout << "\nIngrese el nombre del directorio (o '..' para subir, '/' para raíz): ";
-                string nombreDirectorio;
-                getline(cin, nombreDirectorio);
-                cambiarDirectorio(nombreDirectorio);
-                break;
-            }
-            case 12:
-                listarDirectorios();
-                break;
             case 0:
                 cout << "Saliendo...\n";
                 break;
@@ -125,4 +118,30 @@ int main() {
     } while (opcion != 0);
     
     return 0;
+}
+
+// Función para manejar el menú de encriptación
+void menuEncriptacion() {
+    int opcion;
+    
+    do {
+        mostrarMenuEncriptacion();
+        cin >> opcion;
+        cin.ignore();
+        
+        switch (opcion) {
+            case 1:
+                procesarEncriptacion();
+                break;
+            case 2:
+                procesarDesencriptacion();
+                break;
+            case 3:
+                cout << "Volviendo al menú principal...\n";
+                break;
+            default:
+                cout << "Opción no válida\n";
+        }
+        
+    } while (opcion != 3);
 }

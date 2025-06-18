@@ -1,2 +1,4 @@
 luciana:yahuita
 luciana:pepe1
+admin:12345
+pepe:12345
